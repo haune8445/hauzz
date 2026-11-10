@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Typing Effect</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#setup {
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+}
+
+h2 {
+    color: #00eaff;
+    text-shadow: 0 0 15px #00eaff;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    background: #111;
+    color: white;
+    border: 1px solid #00eaff;
+    border-radius: 12px;
+    font-size: 17px;
+    outline: none;
+    resize: none;
+}
+
+button {
+    margin-top: 15px;
+    padding: 14px 35px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg,#00eaff,#a000ff);
+    color: white;
+    font-weight: bold;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+#screen {
+    display: none;
+    width: 100%;
+    padding: 25px;
+    text-align: center;
+    font-size: clamp(22px, 5vw, 45px);
+    font-weight: bold;
+    overflow-wrap: anywhere;
+    line-height: 1.7;
+}
+
+.char {
+    display: inline;
+    animation: appear 0.3s ease forwards;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        filter: blur(10px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="setup">
+    <h2>NHẬP NỘI DUNG</h2>
+    <textarea id="content"
+    placeholder="Nhập dòng chữ bạn muốn hiển thị..."></textarea>
+    <br>
+    <button onclick="start()">BẮT ĐẦU</button>
+</div>
+
+<div id="screen">
+    <div id="text"></div>
+</div>
+
+<script>
+let message = "";
+let index = 0;
+
+const colors = [
+    "#00eaff",
+    "#ff00ff",
+    "#ff004c",
+    "#00ff88",
+    "#ffff00",
+    "#ffffff",
+    "#9d4dff"
+];
+
+function start() {
+    message = document.getElementById("content").value;
+
+    if (!message.trim()) {
+        alert("Vui lòng nhập chữ!");
+        return;
+    }
+
+    document.getElementById("setup").remove();
+    document.getElementById("screen").style.display = "block";
+
+    typeText();
+}
+
+function typeText() {
+    const output = document.getElementById("text");
+
+    if (index < message.length) {
+        let span = document.createElement("span");
+
+        span.className = "char";
+        span.textContent = message[index];
+        span.style.color = colors[index % colors.length];
+        span.style.textShadow =
+            "0 0 10px " + colors[index % colors.length];
+
+        output.appendChild(span);
+
+        index++;
+
+        setTimeout(typeText, 100);
+    } else {
+        setTimeout(() => {
+            output.innerHTML = "";
+            index = 0;
+            typeText();
+        }, 1500);
+    }
+}
+</script>
+
+</body>
+</html>
